@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://www.parsimap.com/js/v3.1.0/parsimap.js?key=public"></script>
+  </head>
+
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+
+    
+
+    .center-marker {
+        width: 25px;
+        height: 43px;
+        margin-top: -43px;
+        margin-left: -12.5px;
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSI0MyI+PHBhdGggZD0iTTExLjUgMGgxLjkyQzE5LjQ4LjQ1IDI0LjU4IDUuNjIgMjUgMTEuNjh2MS41OGMtLjcyIDcuOTYtOC41NiAxMi42My0xMC4yOCAyMC4xOS0uNDEgMS42MS0uNjUgMy4yNi0uODcgNC45MS0uMjUuODctLjc0IDIuNjItLjk4IDMuNDktMS4wNC0uOTEtMS41OS0yLjA3LTEuNjQtMy40Ny0uNTctMy41Ni0xLjI4LTcuMjEtMy4zNC0xMC4yNUM0LjgxIDIzLjU4Ljc2IDE5LjI3IDAgMTMuNjF2LTEuOTRDLjM3IDUuNjQgNS40OC40NSAxMS41IDBtLTEuMiA4LjMyYy0zLjA2IDEuMzYtMy4yOSA2LjExLS42NCA4IDIuNjggMi4wNSA3LjQyLjIzIDcuNC0zLjM0LjY3LTMuNjMtMy42MS02LjM5LTYuNzYtNC42NnoiIGZpbGw9IiNlYTM2MzciLz48cGF0aCBkPSJNOC44IDQwLjQ0Yy43OC0uNzEgMS41OS0xLjQgMi40My0yLjA2LjA1IDEuNC42IDIuNTYgMS42NCAzLjQ3LjI0LS44Ny43My0yLjYyLjk4LTMuNDkuODkuNyAxLjc1IDEuNDQgMi41OCAyLjIxLS4yNC44NC0uNjIgMS42My0uOTYgMi40M0g5LjY4Yy0uMzEtLjg1LS42Ni0xLjY4LS44OC0yLjU2eiIgb3BhY2l0eT0iLjE4Ii8+PC9zdmc+);
+      }
+  </style>
+  <body>
+    <div id="search_box"></div>
+    <div id="map"></div>
+    <div class="center-marker"></div>
+
+    <script src="./parsimap-geocode.js"></script>
+    <script src="./parsimap-pointer.js"></script>
+    <script type="text/javascript">
+      var container = document.getElementById("map");
+      var mapOptions = {
+        zoom: 18,
+        center: [51.41, 35.7575],
+      };
+      var map = new parsimap.Map(container, mapOptions);
+
+      map.scrollZoom.enable({ around: "center" });
+
+      map.addControl(
+        new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true,
+          },
+          trackUserLocation: true,
+        })
+      );
+
+      map.on("click", (event) => {
+        console.warn("map clicked", event);
+      });
+
+      map.on("load", function () {
+
+        var searchBox = document.getElementById('search_box')
+        var geocode = new parsimap.Geocode(searchBox, map, {
+          keepSearchText: false,
+          autocomplete: true,
+        });
+
+
+        map.on('moveend', function() {
+          // Using the x function we can obtain the geographical coordinates of
+          // the point center.
+          let center = map.getCenter();
+          var stringLngLat = 'lng: ' + center.lng + ' - lat: ' + center.lat;
+          console.warn('pointer', stringLngLat)
+        });
+      });
+
+      console.log(map);
+    </script>
+  </body>
+</html>
